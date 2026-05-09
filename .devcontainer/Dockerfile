@@ -1,41 +1,5 @@
-FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
+FROM mcr.microsoft.com/devcontainers/python:1-3.13-bookworm
 
-ARG USERNAME=vscode
-
-ENV ASDF_DIR=/usr/local/share/asdf
-ENV PATH=${ASDF_DIR}/bin:${ASDF_DIR}/shims:/home/${USERNAME}/.local/bin:${PATH}
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        build-essential \
-        ca-certificates \
-        curl \
-        git \
-        libbz2-dev \
-        libffi-dev \
-        liblzma-dev \
-        libncurses5-dev \
-        libreadline-dev \
-        libsqlite3-dev \
-        libssl-dev \
-        tk-dev \
-        unzip \
-        xz-utils \
-        zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/* \
-    && git clone https://github.com/asdf-vm/asdf.git "${ASDF_DIR}" --branch v0.16.4 \
-    && chown -R "${USERNAME}:${USERNAME}" "${ASDF_DIR}" \
-    && su "${USERNAME}" -c "curl -LsSf https://astral.sh/uv/install.sh | sh" \
-    && su "${USERNAME}" -c "bash -lc '. ${ASDF_DIR}/asdf.sh && asdf plugin add python https://github.com/danhper/asdf-python.git'"
-
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip \
-    && unzip -q /tmp/awscliv2.zip -d /tmp \
-    && /tmp/aws/install \
-    && rm -rf /tmp/awscliv2.zip /tmp/aws
-
-RUN su "${USERNAME}" -c "yes | bash -c \"\$(curl -fsSL https://cli.kiro.dev/install)\""
-
-RUN su "${USERNAME}" -c "curl -fsSL https://claude.ai/install.sh | bash"
-
-RUN echo '. /usr/local/share/asdf/asdf.sh' >> "/home/${USERNAME}/.bashrc" \
-    && echo 'export PATH="/usr/local/share/asdf/bin:/usr/local/share/asdf/shims:$HOME/.local/bin:$PATH"' >> "/home/${USERNAME}/.bashrc"
+# Remove the Yarn repository whose GPG key has become invalid,
+# preventing apt-get update from succeeding during feature installation.
+RUN rm -f /etc/apt/sources.list.d/yarn.list
