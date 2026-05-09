@@ -46,8 +46,7 @@ cp .devcontainer/.env.example .devcontainer/.env
 `.devcontainer/.env` ファイルを編集し、実際の値を設定します。
 
 ```dotenv
-MCP_SERVER_URL=https://your-mcp-server.example/mcp
-MCP_SERVER_API_KEY=replace-with-your-api-key
+GITHUB_PERSONAL_ACCESS_TOKEN=replace-with-your-github-personal-access-token
 ```
 
 > **注意:** `.devcontainer/.env` ファイルは `.gitignore` に含まれているため、Git にコミットされません。API キーなどの機密情報を安全に管理できます。
@@ -63,11 +62,7 @@ VS Code で **Reopen in Container**（コマンドパレット → `Dev Containe
 - `asdf` 経由で Python 3.13 をインストール
 - `uv venv` で仮想環境を作成
 
-### 4. MCP サーバーを設定する
-
-各 `mcp.json` の `template-remote` を、利用したい MCP サーバー定義に合わせて編集します。
-
-### 5. Python パッケージの管理
+### . Python パッケージの管理
 
 Python パッケージは必要に応じて `uv add ...` / `uv sync` で管理します。
 

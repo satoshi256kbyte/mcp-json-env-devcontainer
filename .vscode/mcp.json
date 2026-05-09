@@ -1,11 +1,38 @@
 {
-  "servers": {
-    "template-remote": {
-      "type": "http",
-      "url": "${env:MCP_SERVER_URL}",
-      "headers": {
-        "Authorization": "Bearer ${env:MCP_SERVER_API_KEY}"
-      }
+    "servers": {
+        "iam-policy-autopilot": {
+            "command": "uvx",
+            "args": [
+                "iam-policy-autopilot",
+                "mcp-server"
+            ],
+            "env": {
+                "AWS_REGION": "ap-northeast-1"
+            },
+            "disabled": false,
+            "autoApprove": []
+        },
+        "aws-mcp": {
+            "command": "uvx",
+            "timeout": 100000,
+            "transport": "stdio",
+            "args": [
+                "mcp-proxy-for-aws@latest",
+                "https://aws-mcp.us-east-1.api.aws/mcp",
+                "--metadata",
+                "AWS_REGION=ap-northeast-1"
+            ],
+            "autoApprove": []
+        },
+        "github": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-github"
+            ],
+            "env": {
+                "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+            }
+        }
     }
-  }
 }
